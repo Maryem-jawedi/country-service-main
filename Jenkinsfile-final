@@ -44,7 +44,7 @@ pipeline {
             steps {
                 // kubeconfig-file: Secret file credential holding the docker-desktop kubeconfig
                 // ansible-vault-pass: Secret text credential that decrypts vault.yml (Docker Hub access)
-                withKubeConfig(credentialsId: 'kubeconfig-file') {
+                withCredentials([file(credentialsId: 'kubeconfig-file', variable: 'KUBECONFIG')]) {
                     ansiblePlaybook(installation: 'myansible', inventory: 'hosts', playbook: 'playbookCICD.yml',
                             vaultCredentialsId: 'ansible-vault-pass', extras: '-e image_tag=$BUILD_NUMBER', colorized: true)
                 }
@@ -61,7 +61,7 @@ pipeline {
         stage('Monitoring: kube-state-metrics (Helm)') {
             steps {
                 // pod state exporter scraped by Prometheus on NodePort 30080 (Grafana dashboard 13332)
-                withKubeConfig(credentialsId: 'kubeconfig-file') {
+                withCredentials([file(credentialsId: 'kubeconfig-file', variable: 'KUBECONFIG')]) {
                     sh '''
                         helm repo add prometheus-community https://prometheus-community.github.io/helm-charts --force-update
                         helm upgrade --install kube-state-metrics prometheus-community/kube-state-metrics \
