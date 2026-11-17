@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout code') {
             steps {
-                git branch: 'main', url: 'https://github.com/Daehkcarc-sys/country-service.git'
+                   git branch: 'main', url: 'https://github.com/Maryem-jawedi/country-service-main.git'
             }
         }
         stage('Build and test (Maven, JUnit)') {
